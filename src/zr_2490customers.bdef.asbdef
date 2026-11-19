@@ -1,0 +1,61 @@
+managed implementation in class ZBP_R_2490CUSTOMERS unique;
+strict ( 2 );
+
+with draft;
+extensible;
+
+define behavior for ZR_2490CUSTOMERS alias Customers
+persistent table z2490customers
+extensible
+draft table z2490customers_d
+etag master LastChangedAt
+lock master total etag LastChangedAt
+authorization master ( global )
+{
+  field ( readonly )
+    CustomerUUID,
+    CustomerID,
+    CreatedBy,
+    CreatedAt,
+    LastChangedBy,
+    LastChangedAt;
+
+  field ( numbering : managed )
+    CustomerUUID;
+
+  create;
+  update;
+  delete;
+
+  determination setCustomerID on modify { create; }
+
+  validation validateCustomerName on save { create; update; }
+  validation validateEmail on save { create; update; }
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+
+  draft determine action Prepare {
+    validation validateCustomerName;
+    validation validateEmail;
+  }
+
+  mapping for z2490customers corresponding extensible
+  {
+    CustomerUUID  = CUSTOMER_UUID;
+    CustomerID    = CUSTOMER_ID;
+    Name          = NAME;
+    Street        = STREET;
+    PostalCode    = POSTAL_CODE;
+    City          = CITY;
+    CountryCode   = COUNTRY_CODE;
+    PhoneNumber   = PHONE_NUMBER;
+    EmailAddress  = EMAIL_ADDRESS;
+    CreatedBy     = CREATED_BY;
+    CreatedAt     = CREATED_AT;
+    LastChangedBy = LAST_CHANGED_BY;
+    LastChangedAt = LAST_CHANGED_AT;
+  }
+}

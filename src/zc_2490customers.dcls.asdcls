@@ -1,0 +1,6 @@
+@EndUserText.label: 'ZC_2490CUSTOMERS'
+@MappingRole: true
+define role ZC_2490CUSTOMERS {
+  grant select on ZC_2490CUSTOMERS
+  where INHERITING CONDITIONS FROM ENTITY ZR_2490CUSTOMERS REPLACING { ROOT WITH _BaseEntity };
+}
